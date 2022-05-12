@@ -1,0 +1,61 @@
+esphome:
+  name: keg-manager
+  on_boot:
+    - switch.turn_off: low_led
+    - switch.turn_off: med_led
+    - switch.turn_off: hi_led
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "72ca6958c34d0321976a365568f5b738"
+
+wifi:
+  ssid: ""
+  password: ""
+  fast_connect: true
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Keg-Manager Fallback Hotspot"
+    password: "RKb18DhwbfMd"
+
+captive_portal:
+  
+sensor:
+  - platform: hx711
+    name: "HX711 Value"
+    dout_pin: D3
+    clk_pin: D2
+    gain: 128
+    update_interval: 5s
+    filters:
+      - calibrate_linear:
+          - 235279 -> 0
+          - 137544 -> 11
+    unit_of_measurement: lb
+    
+switch:
+  - platform: gpio
+    name: "Low"
+    id: low_led
+    pin: D5
+
+    
+  - platform: gpio
+    name: "Medium"
+    id: med_led
+    pin: D6
+
+    
+  - platform: gpio
+    name: "High"
+    id: hi_led
+    pin: D7
