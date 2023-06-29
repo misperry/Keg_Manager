@@ -1,0 +1,5 @@
+template:   
+      - name: "Keg 2 Level"
+        unique_id: 'kgl2'
+        unit_of_measurement: "%"
+        state: "{{ ((states('sensor.hx711_value_2')|float - states('input_number.keg_2_empty')|float ) / ((states('input_number.keg_2_full')|float - states('input_number.keg_2_empty')|float) / 100)) | round | int }}"

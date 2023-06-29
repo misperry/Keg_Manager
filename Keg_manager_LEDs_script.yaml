@@ -1,0 +1,81 @@
+alias: "Keg Manager #2 LEDs"
+description: ""
+trigger:
+  - platform: time_pattern
+    seconds: /5
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.keg_2_level
+            below: "100"
+            above: "66.67"
+        sequence:
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.high_2
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.medium_2
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.low_2
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.keg_2_level
+            above: "33.34"
+            below: "66.67"
+        sequence:
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.medium_2
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: switch.high_2
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.low
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.keg_2_level
+            above: "0"
+            below: "33.34"
+        sequence:
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.low_2
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: switch.high_2
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: switch.medium
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.keg_2_level
+            below: "5"
+        sequence:
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: switch.high_2
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: switch.medium_2
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: switch.low_2
+    default: []
+mode: single
